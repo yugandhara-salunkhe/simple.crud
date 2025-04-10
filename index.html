@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>prac-crud</title>
+    <style>
+        .container{
+            width: 50%;
+            margin: 0 auto;
+            border: 2px solid gray;
+            border-radius: 10px;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>simple Crud operation </h2>
+        <input type="text" id="nameInput" placeholder="Enter Name">
+        <button onclick="create()">Add</button>
+
+        <ul id="user-list"></ul>
+    </div>
+    <script>
+
+        let users = [];
+
+        const saveTasks = () => {
+            localStorage.setItem('users', JSON.stringify(users));
+        };
+
+        function create() {
+            const nameInput = document.getElementById('nameInput');
+            const name = nameInput.value.trim();
+            if (name) {
+                users.push(name);
+                nameInput.value = "";
+                render();
+                saveTasks();
+            };
+        }
+
+        function read() {
+            return users;
+        }
+
+        function update(index) {
+            // const newName = prompt("enter the update ", users[index]);
+            // if(newName !== null && newName.trim()){
+            //     users[index] = newName.trim();
+            //     render();
+            // };
+
+            const nameInput = document.getElementById('nameInput');
+            nameInput.value = users[index]
+
+            users.splice(index, 1);
+            render();
+            saveTasks();
+
+        };
+
+        function remove(index) {
+            if (confirm("ARE SURE YOU WANT TO DELETE")) {
+                users.splice(index, 1);
+                render();
+                saveTasks();
+            };
+        }
+
+        function render() {
+            const list = document.getElementById('user-list');
+            list.innerHTML = "";
+            read().forEach((user, index) => {
+                list.innerHTML += ` 
+                <li>
+                    ${user}
+                    <button onclick = "update(${index})">Edit</button>
+                    <button onclick = "remove(${index})">delete</button>
+                </li>
+                `;
+            });
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>
